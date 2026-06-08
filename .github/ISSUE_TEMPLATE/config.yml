@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & general discussion
+    url: https://github.com/sambanova/sambanova-plugin-cc/discussions
+    about: For usage questions and general discussion. Bug reports and feature requests should use the templates above.

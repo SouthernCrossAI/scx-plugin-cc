@@ -1,0 +1,13 @@
+{
+    "name": "sambanova-cc-marketplace",
+    "owner": {
+        "name": "SambaNova"
+    },
+    "plugins": [
+        {
+            "name": "samba-plugin",
+            "source": "./plugins/samba-plugin",
+            "description": "Adds a variety of skills for delegating tasks to the sambanova cloud."
+        }
+    ]
+}

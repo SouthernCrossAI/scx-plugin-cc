@@ -1,0 +1,50 @@
+name: Bug report
+description: Report something that isn't working as expected in samba-plugin.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please fill out the fields below so we can reproduce it.
+        Do **not** include API keys, tokens, or other secrets.
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: From `plugins/samba-plugin/.claude-plugin/plugin.json`.
+      placeholder: "1.0.10"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Claude Code version, Python version.
+      placeholder: "macOS 14.2, Claude Code 1.x, Python 3.11"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps, including the skill/command invoked.
+      placeholder: |
+        1. Run '/code ...'
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs. actual behavior
+      description: What you expected to happen, and what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / output
+      description: Relevant output. Redact any secrets first.
+      render: shell
+    validations:
+      required: false

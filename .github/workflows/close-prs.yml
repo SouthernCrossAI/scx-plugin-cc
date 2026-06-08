@@ -1,0 +1,51 @@
+name: Close external PRs
+
+# This project does not accept external pull requests (development is internal).
+# PRs from anyone who is not an owner/member/collaborator are commented on and
+# closed automatically.
+#
+# Uses `pull_request_target` so the workflow has the write permissions needed to
+# comment and close. It deliberately does NOT check out or run any code from the
+# PR, so untrusted fork code is never executed.
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    # Skip maintainers so they can still open PRs internally if ever needed.
+    if: ${{ !contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association) }}
+    steps:
+      - name: Comment and close
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = [
+              "Thanks for your interest in **samba-plugin**! 🙏",
+              "",
+              "This project is developed internally at SambaNova and published here as a",
+              "public mirror, so we don't accept external pull requests. This PR is being",
+              "closed automatically — it's not a reflection of your change.",
+              "",
+              "If you'd like this addressed, please [open an issue](https://github.com/sambanova/sambanova-plugin-cc/issues/new/choose)",
+              "describing the bug or feature, and we'll triage it into our internal workflow.",
+              "",
+              "See [CONTRIBUTING.md](https://github.com/sambanova/sambanova-plugin-cc/blob/main/CONTRIBUTING.md) for details.",
+            ].join("\n");
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body,
+            });
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              state: "closed",
+            });

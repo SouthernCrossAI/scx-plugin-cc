@@ -1,0 +1,31 @@
+name: Feature request
+description: Suggest an improvement or new capability for samba-plugin.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. Note that development is internal and we do
+        not accept external pull requests — describing the problem here lets us
+        triage it into our internal workflow.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do, and what's getting in the way? Describe the problem, not just a proposed solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Optional. If you have an idea for how it could work, describe it here.
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional. Other approaches or workarounds you've tried.
+    validations:
+      required: false

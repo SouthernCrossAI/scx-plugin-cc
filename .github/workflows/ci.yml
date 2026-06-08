@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least-privilege: CI only needs to read the repo. Fork PRs get a read-only
+# token and no access to secrets, so build steps below cannot be abused to
+# exfiltrate anything.
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate configs & package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate JSON files
+        run: |
+          set -euo pipefail
+          fail=0
+          while IFS= read -r -d '' f; do
+            if ! python -m json.tool "$f" > /dev/null; then
+              echo "::error file=$f::Invalid JSON"
+              fail=1
+            fi
+          done < <(find . -path ./.git -prune -o -name '*.json' -print0)
+          exit $fail
+
+      - name: Validate YAML files
+        run: |
+          python - <<'PY'
+          import glob, sys, yaml
+          bad = []
+          for f in glob.glob(".github/**/*.y*ml", recursive=True):
+              try:
+                  with open(f) as fh:
+                      list(yaml.safe_load_all(fh))
+              except Exception as e:
+                  print(f"::error file={f}::{e}")
+                  bad.append(f)
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: Install agent_shims
+        run: pip install -e plugins/samba-plugin/agent_shims
+
+      - name: Smoke-import package
+        run: python -c "import agent_shims; print('agent_shims import OK')"
