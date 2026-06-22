@@ -26,17 +26,7 @@ MODELS = {
         "context_length": 131072,
         "max_completion_tokens": 131072,
         "sampling_parameters": {"temperature": 1.0, "top_p": 0.95, "top_k": 40},
-    },
-    "gpt-5.4": {
-        "context_length": 400000,
-        "max_completion_tokens": 128000,
-        "sampling_parameters": {"temperature": 1.0, "top_p": 0.95},
-    },
-    "claude-opus-4-7": {
-        "context_length": 200000,
-        "max_completion_tokens": 8192,
-        "sampling_parameters": {"temperature": 1.0, "top_p": 0.95},
-    },
+    }
 }
 
 
