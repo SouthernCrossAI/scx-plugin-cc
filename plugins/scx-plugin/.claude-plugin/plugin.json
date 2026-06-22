@@ -1,0 +1,8 @@
+{
+    "name": "scx-plugin",
+    "version": "1.0.10",
+    "description": "Delegate various tasks to SCX.ai models.",
+    "author": {
+        "name": "SCX"
+    }
+}

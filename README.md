@@ -1,6 +1,6 @@
 # Skills
 
-Claude Code skills for managing SambaNova models and running coding sub-agents.
+Claude Code skills for managing SCX.ai models and running coding sub-agents.
 
 ## Installation
 
@@ -15,14 +15,14 @@ In Claude Code, run:
 ### Step 2: Install the plugin
 
 ```
-/plugin install samba-plugin
+/plugin install scx-plugin
 ```
 
 
 ## Prerequisites
 
 - Python 3 with `venv` support
-- A `SAMBANOVA_API_KEY` environment variable (required by `/model-info`, `/code`, and others.)
+- A `SCX_API_KEY` environment variable (required by `/model-info`, `/code`, and others.)
 - Run `/setup` before using any other skill
 - At least one of `continue` or `opencode` installed (CLI available — no model configuration required)
 
@@ -37,7 +37,7 @@ The plugin maintains its own local SQLite database (`model_params.db`) that stor
 | [setup](#setup) | `/setup` | Initialize the virtual environment and install `agent_shims` |
 | [code](#code) | `/code <tool> <model> <prompt> <cwd> [files...]` | Delegate a coding task to a sub-agent |
 | [list-models](#list-models) | `/list-models` | List all models in the local parameters database |
-| [model-info](#model-info) | `/model-info` | Show all models available on the SambaNova platform |
+| [model-info](#model-info) | `/model-info` | Show all models available on the SCX.ai platform |
 | [update-model](#update-model) | `/update-model <name> <ctx> <max_tokens> [params_json]` | Add or update a model in the database |
 | [reset-model-db](#reset-model-db) | `/reset-model-db` | Clear all entries from the model database |
 
@@ -57,7 +57,7 @@ and prompt. Useful for delegating tasks like code review, implementation, or ide
 | Argument | Required | Description |
 |---|---|---|
 | `tool` | Yes | `continue` or `opencode` (see tool selection guide below) |
-| `model` | Yes | Bare model ID from the database (e.g. `MiniMax-M2.7`, not `sambanova/MiniMax-M2.7`) |
+| `model` | Yes | Bare model ID from the database (e.g. `MiniMax-M2.7`, not `scx-ai/MiniMax-M2.7`) |
 | `cwd` | Yes | Working directory for the tool (defaults to project root if unspecified) |
 | `prompt` | Yes | The prompt to send, quoted as a single shell argument |
 | `--max-tokens` | No | Override the model's `max_completion_tokens` for this run |
@@ -78,8 +78,7 @@ See `skills/code/prompting/` for detailed model and tool guides.
 
 | User says | Maps to |
 |---|---|
-| `MiniMax`, `sambanova/MiniMax-M2.7` | `MiniMax-M2.7` |
-| `gpt-oss`, `sambanova/gpt-oss-120b` | `gpt-oss-120b` |
+| `MiniMax`, `scx-ai/MiniMax-M2.7` | `MiniMax-M2.7` |
 
 ### list-models
 
@@ -92,9 +91,9 @@ context length, max completion tokens, and sampling parameters.
 
 ### model-info
 
-Queries the SambaNova API (`https://api.sambanova.ai/v1/models`) to display the full
+Queries the SCX.ai API (`https://api.scx.ai/v1/models`) to display the full
 catalog of available models with their context length and max completion tokens.
-Requires `SAMBANOVA_API_KEY` to be set.
+Requires `SCX_API_KEY` to be set.
 
 This shows what models *can* be used, as opposed to `/list-models` which shows what
 is stored locally.
@@ -131,7 +130,7 @@ skills/
 ├── setup/                  # Environment initialization
 ├── code/                   # Sub-agent coding tool runner
 ├── list-models/            # Database model listing
-├── model-info/             # SambaNova platform model catalog
+├── model-info/             # SCX.ai platform model catalog
 ├── update-model/           # Database model upsert
 └── reset-model-db/         # Database reset
 

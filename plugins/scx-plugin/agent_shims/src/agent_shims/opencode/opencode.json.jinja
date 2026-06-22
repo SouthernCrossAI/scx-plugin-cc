@@ -1,0 +1,84 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "model": "scx-ai/{{ model.id }}",
+    "small_model": "scx-ai/{{ model.id }}",
+    "provider": {
+        "permission": {
+            "skill": {
+                "*": "deny"
+            }
+        },
+        "scx-ai": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "SCX.ai",
+            "options": {
+                "baseURL": "https://api.scx.ai/v1",
+                "apiKey": "{env:SCX_API_KEY}"
+            },
+            "models": {
+                "MiniMax-M2.7": {
+                    "name": "MiniMax-M2.7",
+                    "reasoning": true,
+                    "provider": {
+                        "npm": "@ai-sdk/anthropic"
+                    },
+                    "limit": {
+                        "context": 120000,
+                        "output": 8000
+                    },
+                    "modalities": {
+                        "input": [
+                            "text"
+                        ],
+                        "output": [
+                            "text"
+                        ]
+                    },
+                    "tools": []
+                },
+                "coder": {
+                    "name": "Coder (SCX)",
+                    "reasoning": true,
+                    "limit": {
+                        "context": 120000,
+                        "output": 8000
+                    },
+                    "modalities": {
+                        "input": [
+                            "text"
+                        ],
+                        "output": [
+                            "text"
+                        ]
+                    }
+                },
+                "MAGPiE": {
+                    "name": "MAGPiE (SCX)",
+                    "limit": {
+                        "context": 131072,
+                        "output": 131072
+                    },
+                    "modalities": {
+                        "input": [
+                            "text"
+                        ],
+                        "output": [
+                            "text"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "agent": {
+        {% for agent in ["plan", "explore", "build", "general"] %}
+        "{{ agent }}": {
+            {% for key, value in sampling_parameters.items() %}
+            "{{ key }}": {{ value }}{% if not loop.last %},{% endif %}
+
+            {% endfor %}
+        }{% if not loop.last %},{% endif %}
+
+        {% endfor %}
+    }
+}
