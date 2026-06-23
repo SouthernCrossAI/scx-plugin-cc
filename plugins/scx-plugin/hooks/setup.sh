@@ -31,6 +31,8 @@ fi
 
 mkdir -p /tmp/scx-plugin/prompts /tmp/scx-plugin/progress
 
+ENV_LINE="export SCX_PLUGIN_PYTHON=\"${CLAUDE_PLUGIN_DIR}/.env/bin/python3\""
+echo "$ENV_LINE" > "${CLAUDE_PLUGIN_DIR}/.env/env.sh"
 if [[ -n "$CLAUDE_ENV_FILE" ]]; then
-  echo "export SCX_PLUGIN_PYTHON=\"${CLAUDE_PLUGIN_DIR}/.env/bin/python3\"" >> "$CLAUDE_ENV_FILE"
+  echo "$ENV_LINE" >> "$CLAUDE_ENV_FILE"
 fi
