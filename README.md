@@ -16,6 +16,7 @@ In Claude Code, run:
 
 ```
 /plugin install scx-plugin
+/reload-plugins
 ```
 
 ## Prerequisites
@@ -23,7 +24,7 @@ In Claude Code, run:
 - Python 3 with `venv` support
 - A `SCX_API_KEY` environment variable (required by `/code`)
 - `opencode` installed (CLI available — no model configuration required)
-- Run `/setup` once after installing the plugin
+- Run `/setup` once after installing the plugin (and after `/reload-plugins`)
 
 ## Skills Overview
 
