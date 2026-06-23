@@ -21,7 +21,7 @@ if [ ! -d "${CLAUDE_PLUGIN_DIR}/.env" ]; then
 fi
 
 SENTINEL="${CLAUDE_PLUGIN_DIR}/.env/.installed_version"
-CURRENT_VERSION=$(python3 -c "import json; print(json.load(open('${CLAUDE_PLUGIN_DIR}/.claude-plugin/plugin.json'))['version'])" 2>/dev/null)
+CURRENT_VERSION=$($PYTHON3 -c "import json; print(json.load(open('${CLAUDE_PLUGIN_DIR}/.claude-plugin/plugin.json'))['version'])" 2>/dev/null)
 
 if [ ! -f "$SENTINEL" ] || [ "$(cat "$SENTINEL")" != "$CURRENT_VERSION" ]; then
   "${CLAUDE_PLUGIN_DIR}/.env/bin/pip" install --upgrade pip -q
