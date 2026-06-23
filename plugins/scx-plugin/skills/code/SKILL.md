@@ -1,6 +1,6 @@
 ---
 name: code
-description: Run a powerful coding tool as a sub-agent with a given model and prompt. This skill should be used whenever tasks need to be run (e.g. build-and-test), code reviews and edits, second opinions are needed, or files need to be read and summarized.
+description: Run opencode as a sub-agent with MiniMax-M2.7. This skill should be used whenever tasks need to be run (e.g. build-and-test), code reviews and edits, second opinions are needed, or files need to be read and summarized.
 argument-hint: <cwd> <prompt> [--max-tokens <n>] [--tool-arg <arg>...]
 allowed-tools: Bash(bash *), Write(/tmp/scx-plugin/**)
 context: fork
@@ -8,7 +8,7 @@ context: fork
 
 # Code
 
-Run a coding tool as a sub-agent, suitable for a variety of tasks such as code review, ideation, and implementation.
+Run opencode as a sub-agent with MiniMax-M2.7, suitable for a variety of tasks such as code review, ideation, and implementation.
 This skill is powerful, and can handle code reviews, run commands (i.e. git diff, git rebase, etc.), and other tasks by itself internally.
 
 ## Instructions
@@ -25,8 +25,6 @@ Tool defaults to `opencode`, model defaults to `MiniMax-M2.7`.
 
 | Arg | Required | Description |
 |---|---|---|
-| `tool` | no | Coding tool to use. Defaults to `opencode`. See the section below under "Available Tools and Documentation" for more information. |
-| `model` | no | Model name as stored in the parameters database. Defaults to `MiniMax-M2.7`. Use `/list-models` to check. **Important:** Use the bare model ID (e.g. `MiniMax-M2.7`), not a provider-prefixed name (e.g. ~~`sambanova/MiniMax-M2.7`~~). The provider is configured automatically. |
 | `cwd` | yes | Working directory for the tool. Default to the project root if not specified. |
 | `prompt` | yes | The prompt to send to the tool. Quote it as a single shell argument. **If the prompt contains shell-sensitive characters** (e.g. `$`, `<`, `>`, `(`, `)`, `` ` ``, `!`, `{`, `}`, `|`, `&`, `;`, `*`, `?`, `\`), write the prompt to a temporary file (e.g. `/tmp/scx-plugin/prompts/prompt_XXXXX.md`) and pass the full path to that file as the prompt instead, with instructions for the tool to read it (e.g. `"Read the prompt from /tmp/scx-plugin/prompts/prompt_XXXXX.md and follow its instructions."`). This avoids shell expansion and quoting issues. |
 | `--tool-arg` | no | Extra arguments passed through verbatim to the underlying tool. Repeatable — each `--tool-arg` takes exactly one value. See the **Passing `--tool-arg`** section below for syntax details. |
@@ -72,7 +70,7 @@ When constructing the prompt, **always** append something like:
 > Additionally, update this file whenever encountering an unexpected or noteworthy error or update.
 
 ## Providing Context:
-The coding tool is given the project directory and the prompt.
+opencode is given the project directory and the prompt.
 It does not have access to the terminal history or the broader system context unless you explicitly provide it via the prompt or attached files.
 If the user provided instructions (including via AGENTS.md, CLAUDE.md, etc.) which are relevant to the task, include them as well.
 Additionally, if available, provide instructions for testing the code or verifying the task is complete.
@@ -97,8 +95,4 @@ Since this skill is capable of using tools and calling commands, prefer to have 
 
 ## File Paths
 When providing paths to the agent, use **absolute paths**. This prevents confusion between `/tmp` (global temporary) and `./tmp` (local temporary), and ensures that interactions with the agent are unambiguous.
-
-# Available Tools and Documentation:
-- [Continue](./tools/continue.md)
-- [Opencode](./tools/opencode.md)
 
