@@ -11,8 +11,8 @@ except ImportError:
 
 def main():
     parser = argparse.ArgumentParser(description="Run a coding tool as a sub-agent.")
-    parser.add_argument("tool", choices=["continue", "opencode"], help="Coding tool to use")
-    parser.add_argument("model", help="Model name (must exist in the parameters database)")
+    parser.add_argument("tool", nargs="?", default="opencode", choices=["continue", "opencode"], help="Coding tool to use (defaults to opencode)")
+    parser.add_argument("model", nargs="?", default="MiniMax-M2.7", help="Model name (must exist in the parameters database, defaults to MiniMax-M2.7)")
     parser.add_argument("cwd", help="Working directory for the tool")
     parser.add_argument("prompt", help="Prompt to send to the tool")
     parser.add_argument("--tool-arg", action="append", default=[],

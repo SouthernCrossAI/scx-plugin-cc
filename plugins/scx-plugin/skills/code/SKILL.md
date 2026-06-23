@@ -1,7 +1,7 @@
 ---
 name: code
 description: Run a powerful coding tool as a sub-agent with a given model and prompt. This skill should be used whenever tasks need to be run (e.g. build-and-test), code reviews and edits, second opinions are needed, or files need to be read and summarized.
-argument-hint: <tool> <model> <cwd> <prompt> [--max-tokens <n>] [--tool-arg <arg>...]
+argument-hint: <cwd> <prompt> [--max-tokens <n>] [--tool-arg <arg>...]
 allowed-tools: Bash(bash *), Write(/tmp/scx-plugin/**)
 context: fork
 ---
@@ -16,7 +16,8 @@ This skill is powerful, and can handle code reviews, run commands (i.e. git diff
 The user's request is in natural language. You must extract the following positional arguments and pass them to the script. Do NOT pass the raw user text as-is. If needed, write the prompt to a file and have the tool read that file instead.
 
 **SCX_PLUGIN_PYTHON is provided as an environment variable by the hook setup. DO NOT SET IT. THAT WOULD BE REALLY EMBARRASSING.**
-Run: `bash ${CLAUDE_SKILL_DIR}/scripts/code.sh <tool> <model> <cwd> <prompt> [--tool-arg <arg>...]`
+Run: `bash ${CLAUDE_SKILL_DIR}/scripts/code.sh <cwd> <prompt> [--max-tokens <n>] [--tool-arg <arg>...]`
+Tool defaults to `opencode`, model defaults to `MiniMax-M2.7`.
 **DO NOT PERFORM THE TASK YOURSELF. THAT'S EMBARASSING, LIKE COVERING UP FOR A SUBORDINATE BY DOING THEIR TASK FOR THEM.**
 **DO NOT RUN THIS IN THE BACKGROUND. CLAUDE HAS EMBARASSING BUGS THAT CAUSE THE AGENT TO STOP AS SOON AS IT STARTS.**
 
@@ -24,8 +25,8 @@ Run: `bash ${CLAUDE_SKILL_DIR}/scripts/code.sh <tool> <model> <cwd> <prompt> [--
 
 | Arg | Required | Description |
 |---|---|---|
-| `tool` | yes | Coding tool to use. See the section below under "Available Tools and Documentation" for more information. |
-| `model` | yes | Model name as stored in the parameters database (use `/list-models` to check). **Important:** Use the bare model ID (e.g. `MiniMax-M2.7`), not a provider-prefixed name (e.g. ~~`sambanova/MiniMax-M2.7`~~). The provider is configured automatically. |
+| `tool` | no | Coding tool to use. Defaults to `opencode`. See the section below under "Available Tools and Documentation" for more information. |
+| `model` | no | Model name as stored in the parameters database. Defaults to `MiniMax-M2.7`. Use `/list-models` to check. **Important:** Use the bare model ID (e.g. `MiniMax-M2.7`), not a provider-prefixed name (e.g. ~~`sambanova/MiniMax-M2.7`~~). The provider is configured automatically. |
 | `cwd` | yes | Working directory for the tool. Default to the project root if not specified. |
 | `prompt` | yes | The prompt to send to the tool. Quote it as a single shell argument. **If the prompt contains shell-sensitive characters** (e.g. `$`, `<`, `>`, `(`, `)`, `` ` ``, `!`, `{`, `}`, `|`, `&`, `;`, `*`, `?`, `\`), write the prompt to a temporary file (e.g. `/tmp/scx-plugin/prompts/prompt_XXXXX.md`) and pass the full path to that file as the prompt instead, with instructions for the tool to read it (e.g. `"Read the prompt from /tmp/scx-plugin/prompts/prompt_XXXXX.md and follow its instructions."`). This avoids shell expansion and quoting issues. |
 | `--tool-arg` | no | Extra arguments passed through verbatim to the underlying tool. Repeatable — each `--tool-arg` takes exactly one value. See the **Passing `--tool-arg`** section below for syntax details. |
@@ -38,23 +39,23 @@ Run: `bash ${CLAUDE_SKILL_DIR}/scripts/code.sh <tool> <model> <cwd> <prompt> [--
 **Caveat:** Values that start with `-` (i.e. flags) are ambiguous to argparse. Use the `=` syntax (`--tool-arg="--flag"`) to avoid parsing errors.
 
 ```bash
-# Basic usage with continue
-code.sh continue MiniMax-M2.7 /project "prompt"
+# Basic usage (uses opencode with MiniMax-M2.7 by default)
+code.sh /project "prompt"
 
 # Override max tokens to 64k
-code.sh continue MiniMax-M2.7 /project "prompt" --max-tokens 65536
+code.sh /project "prompt" --max-tokens 65536
 
-# Pass extra arguments through to continue
-code.sh continue MiniMax-M2.7 /project "prompt" \
+# Pass extra arguments through to opencode
+code.sh /project "prompt" \
   --max-tokens 16000 \
   --tool-arg="--thinking"
 
 # Attach a file to opencode (note: = syntax for the -f flag)
-code.sh opencode MiniMax-M2.7 /project "prompt" \
+code.sh /project "prompt" \
   --tool-arg="-f" --tool-arg="/path/to/file.py"
 
 # Multiple files with opencode
-code.sh opencode MiniMax-M2.7 /project "prompt" \
+code.sh /project "prompt" \
   --tool-arg="-f" --tool-arg="src/main.py" \
   --tool-arg="-f" --tool-arg="src/utils.py"
 ```
