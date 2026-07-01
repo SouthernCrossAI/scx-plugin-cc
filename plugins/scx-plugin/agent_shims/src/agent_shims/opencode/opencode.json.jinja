@@ -1,6 +1,6 @@
 {
     "$schema": "https://opencode.ai/config.json",
-    "model": "scx/{{ model.id }}",
+    "model": "scx-ai/{{ model.id }}",
     "instructions": [
         {% for rule in rule_files %}
         {{ rule | tojson }}{% if not loop.last %},{% endif %}
@@ -16,9 +16,9 @@
     },
     {% endif %}
     "provider": {
-        "scx": {
+        "scx-ai": {
             "npm": "@ai-sdk/openai-compatible",
-            "name": "SCX",
+            "name": "SCX.ai",
             "options": {
                 "baseURL": "{{ base_url }}",
                 "apiKey": "{env:SCX_API_KEY}",

@@ -19,10 +19,10 @@ def test_render_config_is_valid_json(monkeypatch, model):
     monkeypatch.delenv("SCX_BASE_URL", raising=False)
     monkeypatch.delenv("SCX_API_OVERRIDE", raising=False)
     cfg = json.loads(runner.render_config(model))
-    assert cfg["model"] == "scx/My-Model-v1"
-    opts = cfg["provider"]["scx"]["options"]
+    assert cfg["model"] == "scx-ai/My-Model-v1"
+    opts = cfg["provider"]["scx-ai"]["options"]
     assert opts["baseURL"] == "https://api.scx.ai/v1"
-    limits = cfg["provider"]["scx"]["models"]["My-Model-v1"]["limit"]
+    limits = cfg["provider"]["scx-ai"]["models"]["My-Model-v1"]["limit"]
     assert limits["context"] == 8192
     assert limits["output"] == 4096
 
@@ -31,14 +31,14 @@ def test_render_config_honors_base_url_override(monkeypatch, model):
     monkeypatch.delenv("SCX_API_OVERRIDE", raising=False)
     monkeypatch.setenv("SCX_BASE_URL", "https://endpoint.test/v1")
     cfg = json.loads(runner.render_config(model))
-    assert cfg["provider"]["scx"]["options"]["baseURL"] == "https://endpoint.test/v1"
+    assert cfg["provider"]["scx-ai"]["options"]["baseURL"] == "https://endpoint.test/v1"
 
 
 def test_render_config_sets_user_agent_header(monkeypatch, model):
     # The /code path goes through opencode; send an explicit UA so a
     # WAF-gated endpoint doesn't 403 the sub-agent.
     cfg = json.loads(runner.render_config(model))
-    opts = cfg["provider"]["scx"]["options"]
+    opts = cfg["provider"]["scx-ai"]["options"]
     assert opts["headers"]["User-Agent"] == "scx-plugin"
 
 
