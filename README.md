@@ -32,22 +32,18 @@ There is **no manual setup step beyond `/setup`**. On each session start the plu
 builds an isolated virtual environment (`.env/`) and installs its `agent_shims` package
 into it automatically, so the skills are ready to use.
 
-## Configuring the base URL
+## Getting your API key
 
-By default the plugin talks to SCX Cloud (`https://api.scx.ai/v1`). If you run a
-custom deployment — or any OpenAI-compatible SCX endpoint on a different host — point the
-plugin at it with the **`SCX_BASE_URL`** environment variable:
+1. Sign in at [platform.scx.ai](https://platform.scx.ai)
+2. Navigate to **API Keys** in the dashboard
+3. Create a new key and copy it
+4. Set it in your environment:
 
+```bash
+export SCX_API_KEY=your-api-key-here
 ```
-export SCX_BASE_URL=https://api.example.ai/v1
-```
 
-Notes:
-
-- Set the **base** URL (ending in `/v1`). You can also paste a full
-  `…/v1/chat/completions` endpoint — the trailing `/chat/completions` is stripped
-  automatically.
-- This affects every skill that contacts SCX Cloud (`/code` and `/model-info`).
+To persist it across sessions, add the export to your shell profile (`~/.zshrc`, `~/.bashrc`, etc.).
 
 ## How it works
 
@@ -119,11 +115,9 @@ context length, max completion tokens, and sampling parameters.
 
 ### model-info
 
-Queries the SCX API (`<base_url>/models`, where `<base_url>` defaults to
-`https://api.scx.ai/v1` and is configurable via
-[`SCX_BASE_URL`](#configuring-the-base-url)) to display the full catalog of
-available models with their context length and max completion tokens. Requires
-`SCX_API_KEY` to be set.
+Queries `https://api.scx.ai/v1/models` to display the full catalog of available
+models with their context length and max completion tokens. Requires `SCX_API_KEY`
+to be set.
 
 This shows what models *can* be used, as opposed to `/list-models` which shows what is
 stored locally.
