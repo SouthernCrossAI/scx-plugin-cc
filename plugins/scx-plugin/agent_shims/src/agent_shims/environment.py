@@ -1,5 +1,16 @@
 import os
 
+_DEFAULT_SCX_BASE_URL = "https://api.scx.ai/v1"
+
+
+def get_scx_base_url() -> str:
+    """Return the SCX base URL, stripping any trailing /chat/completions path."""
+    url = os.environ.get("SCX_BASE_URL", _DEFAULT_SCX_BASE_URL).rstrip("/")
+    if url.endswith("/chat/completions"):
+        url = url[: -len("/chat/completions")]
+    return url
+
+
 def get_scx_key():
     """Retrieve the SCX API key from environment variables."""
     key = os.environ.get("SCX_API_KEY")
